@@ -27,7 +27,6 @@ char ft_union(char *str1, char *str2)
 		}
 		a++;
 	}
-
 }
 
 
