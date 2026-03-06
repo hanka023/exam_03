@@ -30,13 +30,6 @@ char ft_union(char *str1, char *str2)
 }
 
 
-
-
-
-
-
-
-
 int main(int ac, char **av)
 {
 	if (ac !=3)
