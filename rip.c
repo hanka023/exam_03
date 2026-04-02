@@ -1,0 +1,32 @@
+// https://github.com/tdanielsousa/42_school_new_exams_rank_03/tree/main/level2/rip
+
+
+// Assignment name: rip
+// Expected files: *.c *.h
+// Allowed functions: puts, write
+// --------------------------------------------------------------------------------
+// Write a program that will take as argument a string containing only parenthesis.
+// If parenthesis are unbalanced (for example "())") your program shall remove the
+// minimum number of parenthesis for the expression to be balanced.
+// By removing we mean replacing by spaces.
+// You will print all the solutions (can be more than one).
+// The order of the solutions is not important.
+// For example this should work:
+// (For readability reasons the '_' means space and the spaces are for readability only.)
+// $> ./rip '( ( )' | cat -e
+// _ ( ) $
+// ( _ ) $
+// $> ./rip '( ( ( ) ( ) ( ) ) ( ) )' | cat -e
+// ( ( ( ) ( ) ( ) ) ( ) ) $
+// $> ./rip '( ) ( ) ) ( )' | cat -e
+// ( ) ( ) _ ( ) $
+// ( ) ( _ ) ( ) $
+// ( _ ( ) ) ( ) $
+// $> ./rip '( ( ) ( ( ) (' | cat -e
+// ( ( ) _ _ ) _ $
+// ( _ ) ( _ ) _ $
+// ( _ ) _ ( ) _ $
+// _ ( ) ( _ ) _ $
+// _ ( ) _ ( ) _ $
+
+gi
