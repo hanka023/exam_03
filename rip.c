@@ -1,6 +1,3 @@
-// https://github.com/tdanielsousa/42_school_new_exams_rank_03/tree/main/level2/rip
-
-
 // Assignment name: rip
 // Expected files: *.c *.h
 // Allowed functions: puts, write
@@ -29,4 +26,156 @@
 // _ ( ) ( _ ) _ $
 // _ ( ) _ ( ) _ $
 
-gi
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+
+int ft_strlen(char *str)
+{
+    int i = 0;
+    while (*str)
+    {
+        ++i;
+        ++str;
+    }
+    return (i);
+}
+
+char *array(char *str)
+{
+    char *start;
+    int len = ft_strlen(str);
+    char *s = malloc(sizeof (char) * (len + 1));
+    if (!s)
+        return (0);
+    s[len] = '\0';
+    start = s;
+
+    while (*str)
+    {
+        *s = *str;
+        ++s;
+        ++str;
+    }
+    s = start;
+    return (s);
+}
+
+int diff(char *str)
+{
+    int i = 0; 
+  
+    while(*str)
+    {
+        if (*str == '(')
+            ++i;
+        else if (*str == ')')
+            --i;
+        ++str;
+    }
+  	return (i);
+}
+
+int parity(char *str)
+{
+    int left = 0; 
+    int diff = 0;
+	int to_remove = 0;
+
+    while(*str)
+    {
+        if (*str == '(')
+            ++left;
+        else if (*str == ')')
+        {   if (left <= 0)
+                return (0);
+            --left;
+        }
+        ++str;
+    }
+	if (left == 0)
+		return (1);  //parity OK
+	else
+		return (0);
+}
+
+int to_remove(char *str)
+{
+    int left = 0; 
+    int right = 0;
+	int removal = 0;
+
+    while(*str)
+    {
+        if (*str == '(')
+            ++left;
+        else if (*str == ')')
+        {   
+			if (left <= 0)
+            	++removal;  
+			else 
+				--left;
+		}
+        ++str;
+    }
+	removal = removal + left;
+	printf ("%d \n", removal);
+    return (removal);   //(if left == 0) parity OK
+}
+
+void backtrack(char *str, int dif, int len, int i)
+{
+    
+    int par = parity(str); 
+    char c;
+
+    if(parity (str) && (dif == 0))
+	{
+        printf ("zavorky %s\n",str );
+		return;
+	}	
+
+    if (i == len)
+        return;
+	
+  	backtrack(str, dif, len, i + 1);
+
+   if (dif > 0)
+   {
+	    c = str[i]; 
+	    str[i] = '_';
+	    backtrack(str, dif - 1, len, i + 1);
+	    str[i] = c;
+   } 
+}
+
+void pars(char *str)
+{
+    int left = 0; 
+    int right = 0;
+    int i = 0;
+    char *start = str;
+    int len = strlen(str);
+   	int dif = to_remove(str);  //kolik zavorek smazu
+    int par = parity(str);  //jestli jsou uzavrene a muzu tisknout
+
+    backtrack(str, dif, len, i);
+   // str = start;
+    //printf("%s\n", str);
+    return;
+}
+
+int main (int argc, char *argv[])
+{
+
+    if (argc != 2)
+        return (0);
+
+    char *str = array(argv[1]);
+
+    pars(str);
+
+    free(str);
+    return (0);
+}
