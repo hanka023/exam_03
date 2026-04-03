@@ -31,6 +31,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+void putstr(char *str)
+{
+	while (*str)
+	{
+		write (1, str, 1);
+		++str;
+	}
+	write (1, "\n", 1);
+	return ;
+}
+
 int ft_strlen(char *str)
 {
     int i = 0;
@@ -62,33 +73,18 @@ char *array(char *str)
     return (s);
 }
 
-int diff(char *str)
-{
-    int i = 0; 
-  
-    while(*str)
-    {
-        if (*str == '(')
-            ++i;
-        else if (*str == ')')
-            --i;
-        ++str;
-    }
-  	return (i);
-}
 
 int parity(char *str)
 {
     int left = 0; 
-    int diff = 0;
-	int to_remove = 0;
 
     while(*str)
     {
         if (*str == '(')
             ++left;
-        else if (*str == ')')
-        {   if (left <= 0)
+        if (*str == ')')
+        {  
+			 if (left <= 0)
                 return (0);
             --left;
         }
@@ -103,7 +99,6 @@ int parity(char *str)
 int to_remove(char *str)
 {
     int left = 0; 
-    int right = 0;
 	int removal = 0;
 
     while(*str)
@@ -120,7 +115,7 @@ int to_remove(char *str)
         ++str;
     }
 	removal = removal + left;
-	printf ("%d \n", removal);
+	//printf ("%d \n", removal);
     return (removal);   //(if left == 0) parity OK
 }
 
@@ -130,9 +125,10 @@ void backtrack(char *str, int dif, int len, int i)
     int par = parity(str); 
     char c;
 
-    if(parity (str) && (dif == 0))
+    if (dif == 0)
 	{
-        printf ("zavorky %s\n",str );
+		if (parity (str))
+        	putstr(str);
 		return;
 	}	
 
@@ -161,8 +157,7 @@ void pars(char *str)
     int par = parity(str);  //jestli jsou uzavrene a muzu tisknout
 
     backtrack(str, dif, len, i);
-   // str = start;
-    //printf("%s\n", str);
+
     return;
 }
 
