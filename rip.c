@@ -131,19 +131,16 @@ void backtrack(char *str, int dif, int len, int i)
         	putstr(str);
 		return;
 	}	
-
     if (i == len)
         return;
-	
   	backtrack(str, dif, len, i + 1);
-
-   if (dif > 0)
-   {
+   	if (dif > 0)
+  	{
 	    c = str[i]; 
 	    str[i] = '_';
 	    backtrack(str, dif - 1, len, i + 1);
 	    str[i] = c;
-   } 
+  	} 
 }
 
 void pars(char *str)
