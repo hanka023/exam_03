@@ -82,7 +82,7 @@ float delka(city city1, city city2)
 	if (city1.y == city2.y)
 		len = fabsf(city2.x - city1.x);
 	else if (city1.y == city2.y)
-		len == fabs(city2.x - city1.x);
+		len = fabs(city2.x - city1.x);
 	else
 	{
 		tmp = ((city2.x - city1.x) * (city2.x - city1.x) + (city2.y - city1.y) * (city2.y - city1.y));
@@ -99,36 +99,45 @@ void swap(city *a, city *b)
 	*b = tmp;
 }
 
-void way_len(city *start, city *cities1, city *cities2, float *len, float *min_len, int city_number, int i)
+void way_len(city *cities, float len, float *min_len, int city_number, int i)
 {
 	float dist = 0;
 	float tmp = 0;
 	float cesta_domu;
+	float total = 0;
 	
 
 	// if (!cities1 || !cities2)
 	// 	return;
 		
-	dist = (delka (*cities1, *cities2));
-	*len = *len + dist;
+	dist = (delka (cities[i], cities[i + 1]));
+	len = len + dist;
 
 	//printf ("kontrola %.2f %.2f", cities1[i].x, cities1[i].y );
 
-	if (i == city_number)
-	{ 
-		cesta_domu =  delka(start[0], *cities2);
+	if (i == city_number -1)
+	{ 	
+		cesta_domu =  delka(cities[i],cities[0]);
 	
-		*len = *len + cesta_domu;
-		if ((*min_len == -1) || (*len < *min_len))
-		*min_len = *len;
+		total = len + cesta_domu;
+		if ((*min_len == -1) || (total< *min_len))
+		*min_len = total;
 
-		printf ("min len %.2f \n", *min_len);
+		
+	
 		return;
 	}
-	swap(cities1, cities2);
-	way_len(start, cities1, cities2 , len, min_len, city_number, i+1);
-	swap(cities1, cities2);
-	*len = *len -dist;
+	int j = i;
+
+	while  (j < city_number)
+	{
+		len = len + dist;
+		swap(&cities[i], &cities[j]);
+		way_len(cities, len, min_len, city_number, i+1);
+		swap(&cities[i], &cities[j]);
+		len = len - dist;
+		++j;
+	}	
 }
 
 int main (int argc, char *argv[])
@@ -137,7 +146,7 @@ int main (int argc, char *argv[])
 	int i = 0;
 	float len = 0;
 	float min_len = -1;
-	
+
 
 	ftpr = fopen("file.txt", "r");
 	if (ftpr == NULL)
@@ -173,8 +182,8 @@ int main (int argc, char *argv[])
 	}
 	int city_number = i;
 	i = 0;
-	way_len(cities, &cities[i], &cities[i + 1], &len, &min_len, city_number, i);
-
+	way_len(cities, len, &min_len, city_number, i);
+	printf ("minimalni delka: %.2f\n", min_len);
 
 fclose(ftpr);
 free(cities);
