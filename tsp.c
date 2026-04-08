@@ -74,10 +74,71 @@ typedef struct{
 	float y;
 } city;
 
+float delka(city city1, city city2)
+{
+	float len = 0;
+	float tmp = 0;
+
+	if (city1.y == city2.y)
+		len = fabsf(city2.x - city1.x);
+	else if (city1.y == city2.y)
+		len == fabs(city2.x - city1.x);
+	else
+	{
+		tmp = ((city2.x - city1.x) * (city2.x - city1.x) + (city2.y - city1.y) * (city2.y - city1.y));
+		len = sqrt(tmp);
+	}
+	//printf ("delka %.2f", len);
+	return (len);
+}
+
+void swap(city *a, city *b)
+{
+	city tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void way_len(city *start, city *cities1, city *cities2, float *len, float *min_len, int city_number, int i)
+{
+	float dist = 0;
+	float tmp = 0;
+	float cesta_domu;
+	
+
+	// if (!cities1 || !cities2)
+	// 	return;
+		
+	dist = (delka (*cities1, *cities2));
+	*len = *len + dist;
+
+	//printf ("kontrola %.2f %.2f", cities1[i].x, cities1[i].y );
+
+	if (i == city_number)
+	{ 
+		cesta_domu =  delka(start[0], *cities2);
+	
+		*len = *len + cesta_domu;
+		if ((*min_len == -1) || (*len < *min_len))
+		*min_len = *len;
+
+		printf ("min len %.2f \n", *min_len);
+		return;
+	}
+	swap(cities1, cities2);
+	way_len(start, cities1, cities2 , len, min_len, city_number, i+1);
+	swap(cities1, cities2);
+	*len = *len -dist;
+}
+
 int main (int argc, char *argv[])
 {
 	FILE *ftpr;
-	int i;
+	int i = 0;
+	float len = 0;
+	float min_len = -1;
+	
+
 	ftpr = fopen("file.txt", "r");
 	if (ftpr == NULL)
 	{
@@ -89,7 +150,15 @@ int main (int argc, char *argv[])
 	float f = 0;
 	i = 0;
 
-	city *cities = malloc (sizeof (city) * 12 );
+	float a;
+	float b;
+	while (i < 11 && (fscanf(ftpr, " %f, %f ", &a, &b)) == 2)
+		++i;
+	
+	i = 0;
+	rewind(ftpr);
+
+	city *cities = malloc (sizeof (city) * 12);
 		if (!cities)
 		{
 			printf ("malloc selhal\n");
@@ -102,6 +171,10 @@ int main (int argc, char *argv[])
 		printf("Mesto %d: x=%.0f, y=%.0f\n", i, cities[i].x, cities[i].y);
 		++i;
 	}
+	int city_number = i;
+	i = 0;
+	way_len(cities, &cities[i], &cities[i + 1], &len, &min_len, city_number, i);
+
 
 fclose(ftpr);
 free(cities);
