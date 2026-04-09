@@ -91,7 +91,7 @@ float delka(city city1, city city2)
 	//printf ("delka %.2f", len);
 	return (len);
 }
-
+//zkousim scanf
 void swap(city *a, city *b)
 {
 	city tmp = *a;
@@ -110,32 +110,33 @@ void way_len(city *cities, float len, float *min_len, int city_number, int i)
 	// if (!cities1 || !cities2)
 	// 	return;
 		
-	dist = (delka (cities[i], cities[i + 1]));
-	len = len + dist;
 
 	//printf ("kontrola %.2f %.2f", cities1[i].x, cities1[i].y );
 
-	if (i == city_number -1)
+	if (i == city_number)
 	{ 	
-		cesta_domu =  delka(cities[i],cities[0]);
+		cesta_domu = delka(cities[city_number - 1], cities[0]);
 	
 		total = len + cesta_domu;
-		if ((*min_len == -1) || (total< *min_len))
-		*min_len = total;
 
-		
-	
+		if ((*min_len == -1) || (total< *min_len))
+			*min_len = total;	
 		return;
 	}
 	int j = i;
 
 	while  (j < city_number)
 	{
-		len = len + dist;
-		swap(&cities[i], &cities[j]);
-		way_len(cities, len, min_len, city_number, i+1);
-		swap(&cities[i], &cities[j]);
-		len = len - dist;
+		swap(&cities[i], &cities[j]);  //postupne proswapuju vsechny mesta
+
+		float dist = 0;
+		if (i > 0)
+			dist = delka (cities[i - 1], cities[i]); //pocitam vzdalenost mezi 2 mesty 
+		else
+			dist = 0; //kdyz neni (i - 0)
+		
+		way_len(cities, len + dist, min_len, city_number, i + 1);	//dist prictu  celkove delce len
+		swap(&cities[i], &cities[j]); //swapnu zpatky 
 		++j;
 	}	
 }
@@ -147,47 +148,81 @@ int main (int argc, char *argv[])
 	float len = 0;
 	float min_len = -1;
 
-
-	ftpr = fopen("file.txt", "r");
-	if (ftpr == NULL)
-	{
-		printf ("nebezi ftpr\n");
-		return (0);
-	}
-	char output [50];
-
-	float f = 0;
-	i = 0;
-
-	float a;
-	float b;
-	while (i < 11 && (fscanf(ftpr, " %f, %f ", &a, &b)) == 2)
-		++i;
-	
-	i = 0;
-	rewind(ftpr);
-
 	city *cities = malloc (sizeof (city) * 12);
 		if (!cities)
 		{
 			printf ("malloc selhal\n");
-			   fclose(ftpr);
-			   return (0);
+			return (0);
 		}
 			
-	while (i < 11 && (fscanf(ftpr, " %f, %f ", &cities[i].x, &cities[i].y)) == 2)
+	while (i < 11 && (fscanf(stdin, " %f, %f ", &cities[i].x, &cities[i].y)) == 2)
 	{
 		printf("Mesto %d: x=%.0f, y=%.0f\n", i, cities[i].x, cities[i].y);
 		++i;
 	}
 	int city_number = i;
-	i = 0;
-	way_len(cities, len, &min_len, city_number, i);
-	printf ("minimalni delka: %.2f\n", min_len);
 
-fclose(ftpr);
+	if (city_number > 0)
+	{
+		way_len(cities, len, &min_len, city_number, 0);
+		printf ("minimalni delka: %.2f\n", min_len);
+	}
+
+
 free(cities);
 return (0);
 
 }
+
+
+// int main (int argc, char *argv[])
+// {
+// 	FILE *ftpr;
+// 	int i = 0;
+// 	float len = 0;
+// 	float min_len = -1;
+
+// 	ftpr = fopen("file.txt", "r");
+// 	if (ftpr == NULL)
+// 	{
+// 		printf ("nebezi ftpr\n");
+// 		return (0);
+// 	}
+// 	char output [50];
+
+// 	float f = 0;
+// 	i = 0;
+
+// 	float a;
+// 	float b;
+// 	while (i < 11 && (fscanf(ftpr, " %f, %f ", &a, &b)) == 2)  //
+// 		++i;
+	
+// 	i = 0;
+// 	rewind(ftpr);
+
+// 	city *cities = malloc (sizeof (city) * 12);
+// 		if (!cities)
+// 		{
+// 			printf ("malloc selhal\n");
+// 			   fclose(ftpr);
+// 			   return (0);
+// 		}
+			
+// 	while (i < 11 && (fscanf(ftpr, " %f, %f ", &cities[i].x, &cities[i].y)) == 2)
+// 	{
+// 		printf("Mesto %d: x=%.0f, y=%.0f\n", i, cities[i].x, cities[i].y);
+// 		++i;
+// 	}
+// 	int city_number = i;
+// 	i = 0;
+// 	way_len(cities, len, &min_len, city_number, i);
+// 	printf ("minimalni delka: %.2f\n", min_len);
+
+// fclose(ftpr);
+// free(cities);
+// return (0);
+
+// }
+
 
