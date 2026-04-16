@@ -59,6 +59,9 @@
 // $> ./tsp < square.txt | cat -e
 // 4.00$
 
+// gcc tsp.c -o tsp -lm
+
+
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -173,56 +176,3 @@ free(cities);
 return (0);
 
 }
-
-
-// int main (int argc, char *argv[])
-// {
-// 	FILE *ftpr;
-// 	int i = 0;
-// 	float len = 0;
-// 	float min_len = -1;
-
-// 	ftpr = fopen("file.txt", "r");
-// 	if (ftpr == NULL)
-// 	{
-// 		printf ("nebezi ftpr\n");
-// 		return (0);
-// 	}
-// 	char output [50];
-
-// 	float f = 0;
-// 	i = 0;
-
-// 	float a;
-// 	float b;
-// 	while (i < 11 && (fscanf(ftpr, " %f, %f ", &a, &b)) == 2)  //
-// 		++i;
-	
-// 	i = 0;
-// 	rewind(ftpr);
-
-// 	city *cities = malloc (sizeof (city) * 12);
-// 		if (!cities)
-// 		{
-// 			printf ("malloc selhal\n");
-// 			   fclose(ftpr);
-// 			   return (0);
-// 		}
-			
-// 	while (i < 11 && (fscanf(ftpr, " %f, %f ", &cities[i].x, &cities[i].y)) == 2)
-// 	{
-// 		printf("Mesto %d: x=%.0f, y=%.0f\n", i, cities[i].x, cities[i].y);
-// 		++i;
-// 	}
-// 	int city_number = i;
-// 	i = 0;
-// 	way_len(cities, len, &min_len, city_number, i);
-// 	printf ("minimalni delka: %.2f\n", min_len);
-
-// fclose(ftpr);
-// free(cities);
-// return (0);
-
-// }
-
-
