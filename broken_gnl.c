@@ -61,25 +61,66 @@ void *ft_memmove(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-int str_append_mem(char **s1, char *s2, size_t size2)
-{
-    size_t size1 = ft_strlen(*s1);
+// int str_append_mem(char **s1, char *s2, size_t size2)
+// {
+//     size_t size1 = ft_strlen(*s1);
 
-    char *tmp = malloc(size2 + size1 + 1);
-    if (!tmp)
-        return 0;
-    ft_memcpy(tmp, *s1, size1);
-    ft_memcpy(tmp + size1, s2, size2);
-    tmp[size1 + size2] = 0;
-    free(*s1);
-    *s1 = tmp;
-    return 1;
+//     char *tmp = malloc(size2 + size1 + 1);
+//     if (!tmp)
+//         return 0;
+//     ft_memcpy(tmp, *s1, size1);
+//     ft_memcpy(tmp + size1, s2, size2);
+//     tmp[size1 + size2] = 0;
+//     free(*s1);
+//     *s1 = tmp;
+//     return 1;
+// }
+
+char *extract_line(char *buffer)
+{
+	char *newline;
+	int i = 0;
+	int n = 0;
+
+	while (buffer[i] != '\0' || buffer[i] != '\n')
+	{
+		++i;
+		if (buffer[i] == '\n')
+		++i;
+	}
+	newline = malloc (sizeof (char) * (i + 1));
+
+	while (n < i)
+	{
+		newline[n] = buffer[n];
+		++n;
+	}
+	newline[n] = '\0';
+	return (newline);
+
 }
 
-int join_buffer(char **s1, char *s2)
+
+char *cut_buffer(char *buffer)
 {
-    return join_mem(s1, s2, ft_strlen(s2));
+	char *start = NULL;
+	char *pole = NULL;
+
+	if (!buffer)
+		return NULL;
+	
+	start = ft_strchr(buffer, '\n');
+	if (! start)
+	{ 
+		free (buffer);
+		return (NULL);
+	}
+	start++;
+	pole = ft_strdup (start);
+	free(buffer);
+	return (pole);
 }
+
 
 char *get_next_line(int fd)
 {
@@ -102,7 +143,7 @@ char *get_next_line(int fd)
 	line = extract_line (buffer);
 	cut_buffer(buffer);
 
-    return line;
+    return (line);
 }
 
 int main(int argc, char *argv[])
