@@ -6,7 +6,7 @@
 char *ft_strchr(char *s, int c)
 {
     int i = 0;
-    while ( s[i] != '\0')
+    while (s[i] != '\0')
 	{
 		if (s[i] == (char)c)
         	return ((char *)(s + i));
@@ -58,8 +58,34 @@ void *ft_memmove(void *dest, const void *src, size_t n)
 			++i;
 		}
 	}
+	dest = d;
 	return (dest);
 }
+
+
+void ft_strdup (char *dest, char *src)
+{
+	int i = 0;
+	while (src[i] != '\0')
+		++i;
+	
+	dest = malloc(sizeof(char) * (i + 1));
+	if (!dest)
+		return;
+
+	while (*src)
+	{
+		*dest = *src;
+		++dest;
+		++src;
+	}
+	*dest = '\0';
+
+	return;
+		
+	
+}
+
 
 // int str_append_mem(char **s1, char *s2, size_t size2)
 // {
@@ -101,30 +127,69 @@ char *extract_line(char *buffer)
 }
 
 
-char *cut_buffer(char *buffer)
+void cut_buffer(char *buffer)
 {
 	char *start = NULL;
 	char *pole = NULL;
 
 	if (!buffer)
-		return NULL;
+		return;
 	
 	start = ft_strchr(buffer, '\n');
 	if (! start)
 	{ 
 		free (buffer);
-		return (NULL);
+		return;
 	}
 	start++;
-	pole = ft_strdup (start);
+	ft_strdup (pole, start);
 	free(buffer);
-	return (pole);
+	buffer = pole; 
+	return;
+}
+
+char *join_buffer(char *buffer, char *maly_buffer)
+{
+	int i = 0;
+	int j = 0;
+
+	while (buffer[i] != '\0')
+		++i;
+	while (maly_buffer[j] != '\0')
+		++j;
+
+	char *pole = malloc (sizeof(char) * (i + j + 1));
+	if (!pole)
+		return (NULL);
+	i = 0;
+	j = 0;
+
+	while (buffer[i] != '\0')
+	{
+		pole[i] = buffer[i];
+		++i;
+	}
+	while (maly_buffer[j] != '\0')
+	{
+		pole[i] = maly_buffer[j];
+		++i;
+		++j;
+	}
+	pole[i] = '\0';
+
+	free(buffer);
+	free(maly_buffer);
+
+	buffer = pole;
+	return (buffer);
+	
+
 }
 
 
 char *get_next_line(int fd)
 {
-    static char buffer = NULL;
+    static char *buffer = NULL;
 	char maly_buffer[BUFFER_SIZE + 1];
     char *line = NULL;
 
@@ -137,7 +202,7 @@ char *get_next_line(int fd)
         if (! byte_read)
 			return(NULL);
 
- 		if (!join_buffer(&maly_buffer, buffer))
+ 		if (!join_buffer(buffer, maly_buffer))
             return NULL;
 	}
 	line = extract_line (buffer);
